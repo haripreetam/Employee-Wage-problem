@@ -2,12 +2,18 @@
 import random
 
 def check_attendence():
+    print("Welcome to Employee Wage computation problem")
     attendence = random.randint(0,1)
-    if attendence == 1:
-        print("Employee is present")
-    else:
-        print("Employee is absent")
+    return attendence
 
+def Check_daily_wage():
+    wage_per_ht = 20
+    wage_attendence = check_attendence()
+    if wage_attendence == 1:
+        daily_wage = wage_per_ht * 8
+        print(f"Employee was present full day so his daily wage is : {daily_wage}")
+    else:
+        daily_wage = 0
+        print(f"Employee was absent for the day so his daily wage is : {daily_wage}")
 if __name__  == "__main__":
-    print("Welcome to Employee Wage Program")
-    check_attendence()
+    Check_daily_wage()
