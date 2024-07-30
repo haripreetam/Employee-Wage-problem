@@ -7,13 +7,13 @@ def check_attendance():
     return attendance
 
 def calculate_Full_Day_Wage(wage_per_ht):
-    return wage_per_ht * 8
+    return wage_per_ht * 8, 8
 
 def calculate_Half_Day_Wage(wage_per_ht):
-    return wage_per_ht * 4
+    return wage_per_ht * 4, 4
 
 def calculate_Absent_Wage(wage_per_ht):
-    return 0
+    return 0 ,0
 
 def calculate_daily_wage():
     wage_per_ht = 20
@@ -34,9 +34,17 @@ def calculate_daily_wage():
 
 def cal_monthly_wage():
     total_wage = 0
-    working_days = 20
-    for day in range(working_days):
-        total_wage += calculate_daily_wage()
+    total_hours = 0
+    total_days = 0
+    max_hours = 100
+    max_days = 20
+    
+    while total_hours < max_hours and total_days < max_days:
+        daily_wage, hours_worked = calculate_daily_wage()#getting the tuples
+        total_wage += daily_wage
+        total_hours += hours_worked
+        total_days += 1
+    
     return total_wage
 
 
