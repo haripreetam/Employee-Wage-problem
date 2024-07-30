@@ -1,9 +1,9 @@
 import random
 
 class Employee:
-    wage_per_ht = 20
-    max_hours = 100
-    max_days = 20
+    # wage_per_ht = 20
+    # max_hours = 100
+    # max_days = 20
     
     def __init__(self):
         self.total_wage = 0
@@ -16,44 +16,57 @@ class Employee:
         return random.randint(0, 2)
     
     @classmethod
-    def Calculate_Full_Day_Wage(cls):
-        return cls.wage_per_ht * 8, 8
+    def calculate_full_day_wage(cls, wage_per_hour):
+        return wage_per_hour * 8, 8
     
     @classmethod
-    def Calculate_Half_Day_Wage(cls):
-        return cls.wage_per_ht * 4, 4
+    def calculate_half_day_wage(cls, wage_per_hour):
+        return wage_per_hour * 4, 4
     
     @classmethod
-    def Calculate_Absent_Wage(cls):
+    def calculate_absent_wage(cls, wage_per_hour):
         return 0, 0
     
     @classmethod
-    def Calculate_Daily_Wage(cls):
+    def calculate_daily_wage(cls, wage_per_hour):
         attendance = cls.check_attendance()
         
-        # Dictionary to simulate switch-case
         switcher = {
-            1: cls.Calculate_Full_Day_Wage,
-            2: cls.Calculate_Half_Day_Wage,
-            0: cls.Calculate_Absent_Wage
+            1: cls.calculate_full_day_wage,
+            2: cls.calculate_half_day_wage,
+            0: cls.calculate_absent_wage
         }
-
-        # Get the function from switcher dictionary
-        func = switcher.get(attendance, lambda: (0, 0))
+        func = switcher.get(attendance, lambda wage_per_hour: (0, 0))
         
-        # Execute the function
-        return func()
+        return func(wage_per_hour)
     
-    def cal_monthly_wage(self):
-        while self.total_hours < Employee.max_hours and self.total_days < Employee.max_days:
-            daily_wage, hours_worked = Employee.Calculate_Daily_Wage()
+    def cal_monthly_wage(self, wage_per_hour, max_hours, max_days):
+        while self.total_hours < max_hours and self.total_days < max_days:
+            daily_wage, hours_worked = Employee.calculate_daily_wage(wage_per_hour)
             self.total_wage += daily_wage
             self.total_hours += hours_worked
             self.total_days += 1
         
         return self.total_wage
 
+class Company:
+    def __init__(self, name, wage_per_hour, max_hours, max_days):
+        self.name = name
+        self.wage_per_hour = wage_per_hour
+        self.max_hours = max_hours
+        self.max_days = max_days
+        self.employee = Employee()
+    
+    def calculate_employee_wage(self):
+        return self.employee.cal_monthly_wage(self.wage_per_hour, self.max_hours, self.max_days)
+    
 if __name__ == "__main__":
-    emp = Employee()
-    monthly_wage = emp.cal_monthly_wage()
-    print(f"Monthly wage of the employee is: {monthly_wage}")
+    companies = [
+        Company("CompanyA", 20, 100, 20),
+        Company("CompanyB", 25, 120, 22),
+        Company("CompanyC", 30, 110, 21)
+    ]
+    
+    for company in companies:
+        monthly_wage = company.calculate_employee_wage()
+        print(f"Monthly wage for an employee in {company.name} is: {monthly_wage}")
